@@ -1,14 +1,14 @@
 {
-  "name": "window-control",
-  "version": "1.4.5",
-  "description": "Tools to manage window focus on mac, windows and linux",
+  "name": "window-control-repact",
+  "version": "1.4.6",
+  "description": "Tools to manage window focus on mac, windows and linux, forked from bruno-robert/window-control",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uranium78/window-control.git"
+    "url": "git+https://github.com/t880216t/window-control.git"
   },
   "keywords": [
     "window",
@@ -16,12 +16,12 @@
     "control",
     "tools"
   ],
-  "author": "Bruno Robert",
+  "author": "t880216t",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/uranium78/window-control/issues"
+    "url": "https://github.com/t880216t/window-control/issues"
   },
-  "homepage": "https://github.com/uranium78/window-control#readme",
+  "homepage": "https://github.com/t880216t/window-control#readme",
   "dependencies": {
     "hazardous": "^0.3.0",
     "json5": "^2.1.1"

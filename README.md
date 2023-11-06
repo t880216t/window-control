@@ -14,7 +14,7 @@ sudo apt install wmctrl xdotool
 ## Installation (all platforms)
 
 ```
-npm install window-control
+npm install window-control-repack
 ```
 
 ## example usage
