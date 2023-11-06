@@ -26,11 +26,11 @@ const sanitiseUserInput = (input) => {
  * @param {integer} id PID to use to find the application window
  * @param {function} callback callback, get error and message as parameters
  */
-const focusWindow = (id, callback) => {
+const focusWindow = (id, windowName, callback) => {
   const emptyCallBack = () => {}
   callback = callback || emptyCallBack
   if ( process.platform === 'darwin' ) {
-    exec(`osascript "${macFocusWindow}" ${id}`, (error, stdout, stderr) => {
+    exec(`osascript "${macFocusWindow}" ${id} ${windowName}`, (error, stdout, stderr) => {
       if (error) {
         callback(error, null)
         return
@@ -50,11 +50,11 @@ const focusWindow = (id, callback) => {
   } else {
     callback('Platform not suported', null)
   }
-  
+
 }
 
 /**
- * Focuses the first window of the PID given, then sends the cahracters in the keys string to the focused window by emulating the keyboard. 
+ * Focuses the first window of the PID given, then sends the cahracters in the keys string to the focused window by emulating the keyboard.
  * Optionally, can focus back to the original application.
  * Optionally has a callback that gets (error, message) parameters for the error message (if any) and any output of the script
  * @param {integer} id PID of the pcoess to focus, or on linux and windows this would be the windowID
@@ -87,7 +87,7 @@ const sendKeys = (id, keys, {resetFocus = false, pressEnterOnceDone = true} = {}
         if (stderr) reject(stderr)
         resolve(stdout)
       })
-      
+
     } else if ( process.platform === 'linux' ) {
       // TODO: add option to reset focus on linux
       // TODO: add option to not press enter once keys have been sent
@@ -112,12 +112,12 @@ const sendKeys = (id, keys, {resetFocus = false, pressEnterOnceDone = true} = {}
  * - id is the window id (linux)
  * - user is the user that owns the process running the window (linux)
  * - title is the title of the window
- * 
+ *
  * On mac, the object will contain
  * - processName is the name of the process owning the windows
  * - id identifier of the process
  * - windows[] and array of strings for the title of each window this process owns
- * 
+ *
  * In all cases, the ID can be used in sendKeys()
  * @return {Promise} array of window list Object
  */
@@ -131,7 +131,7 @@ const getWindowList = () => {
         if (stderr) reject(stderr)
         windowStrings = stdout.split('\n')
         windowList = []
-  
+
         windowStrings.forEach((windowString) => {
           let windowTitle = windowString.split(' ').slice(4).join(' ')
           windowObject = {id: windowString.split(' ')[0], user: windowString.split(' ')[3], title: windowTitle}
@@ -140,7 +140,7 @@ const getWindowList = () => {
         resolve(windowList)
       })
 
-    // MacOS
+      // MacOS
     } else if (process.platform === 'darwin'){
       exec(`osascript '${macGetWindowList}'`, (error, stdout, stderr) => {
         if (error) {
@@ -154,8 +154,12 @@ const getWindowList = () => {
           if (stderr.charAt(0) !== '{') {
             reject(stderr)
           } else {
-            let winList = JSON5.parse(stderr).data
-            resolve(winList)
+            try{
+              let winList = JSON5.parse(stderr.replace(/\n/g, '')).data
+              resolve(winList)
+            }catch(e){
+              resolve([])
+            }
           }
 
         } else {
@@ -164,7 +168,7 @@ const getWindowList = () => {
         }
       })
 
-    // Windows
+      // Windows
     } else if (process.platform === 'win32') {
 
       exec(`${winGetWindowList}`, (error, stdout, stderr) => {
@@ -194,7 +198,7 @@ const getWindowList = () => {
         }
       })
 
-    // Other
+      // Other
     } else {
       reject('platform not supported yet')
     }
