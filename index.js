@@ -69,7 +69,9 @@ const sendKeys = (id, keys, {resetFocus = false, pressEnterOnceDone = true} = {}
     keys = keys.replace('"', '\\"')
 
     if ( process.platform === 'darwin' ) {
-      exec(`osascript "${macFocusAndSendKeys}" '${sanitiseUserInput(id)}' '${sanitiseUserInput(keys)}' ${resetFocus} ${pressEnterOnceDone}`, (error, stdout, stderr) => {
+      const cmd = `osascript "${macFocusAndSendKeys}" '${sanitiseUserInput(id)}' '${sanitiseUserInput(keys)}' ${resetFocus} ${pressEnterOnceDone}`
+      console.log(cmd);
+      exec(cmd, (error, stdout, stderr) => {
         if (error) reject(error)
         if (stderr) reject(stderr)
         resolve(stdout)
@@ -155,16 +157,24 @@ const getWindowList = () => {
             reject(stderr)
           } else {
             try{
+              console.log(stderr);
               let winList = JSON5.parse(stderr.replace(/\n/g, '')).data
               resolve(winList)
             }catch(e){
+              console.log(e);
               resolve([])
             }
           }
 
         } else {
-          let winList = JSON5.parse(stdout).data
-          resolve(winList)
+          try{
+            console.log(stdout);
+            let winList = JSON5.parse(stdout.replace(/\n/g, '')).data
+            resolve(winList)
+          }catch(e){
+            console.log(e);
+            resolve([])
+          }
         }
       })
 

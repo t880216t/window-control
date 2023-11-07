@@ -1,6 +1,6 @@
 {
   "name": "window-control-repact",
-  "version": "1.4.6",
+  "version": "1.5.1",
   "description": "Tools to manage window focus on mac, windows and linux, forked from bruno-robert/window-control",
   "main": "index.js",
   "scripts": {
