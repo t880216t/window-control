@@ -156,7 +156,6 @@ const getWindowList = () => {
             reject(stderr)
           } else {
             try{
-              console.log(stderr);
               let winList = JSON5.parse(stderr.replace(/\n/g, '')).data
               resolve(winList)
             }catch(e){
@@ -167,7 +166,6 @@ const getWindowList = () => {
 
         } else {
           try{
-            console.log(stdout);
             let winList = JSON5.parse(stdout.replace(/\n/g, '')).data
             resolve(winList)
           }catch(e){
