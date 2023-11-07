@@ -70,7 +70,6 @@ const sendKeys = (id, keys, {resetFocus = false, pressEnterOnceDone = true} = {}
 
     if ( process.platform === 'darwin' ) {
       const cmd = `osascript "${macFocusAndSendKeys}" '${sanitiseUserInput(id)}' '${sanitiseUserInput(keys)}' ${resetFocus} ${pressEnterOnceDone}`
-      console.log(cmd);
       exec(cmd, (error, stdout, stderr) => {
         if (error) reject(error)
         if (stderr) reject(stderr)
